@@ -85,9 +85,12 @@ public class ControlEnsamble {
             if (resultSet.next()) {
                 throw new ConflictException();
             }else{
-                PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM modelo_mueble WHERE nombre = ?");
-                preparedStatement.setString(1, nombre);
-                preparedStatement.executeUpdate();
+                PreparedStatement borrarInstruccionesModelo = connection.prepareStatement("DELETE FROM instrucciones_mueble WHERE nombre_mueble = ?");
+                borrarInstruccionesModelo.setString(1, nombre);
+                PreparedStatement borrarModelo = connection.prepareStatement("DELETE FROM modelo_mueble WHERE nombre = ?");
+                borrarModelo.setString(1, nombre);
+                borrarInstruccionesModelo.executeUpdate();
+                borrarModelo.executeUpdate();
             }
         } catch (SQLException e) {
             throw new SQLException();

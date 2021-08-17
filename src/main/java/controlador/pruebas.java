@@ -3,6 +3,7 @@ package controlador;
 import java.sql.SQLException;
 import java.util.Scanner;
 
+import exceptions.ConflictException;
 import exceptions.DuplicadoException;
 
 public class pruebas {
@@ -20,12 +21,14 @@ public class pruebas {
         input.close();
         
         try {
-            ControlEnsamble.eliminarInstruccionesMueble(nombreModelo, nombrePieza);
+            ControlEnsamble.eliminarModelo(nombreModelo);
             System.out.println("Query exitoso");
         } catch (SQLException e) {
             e.printStackTrace();
         } /*catch (DuplicadoException e) {
             System.out.println("Ya estaba registrado");
-        }*/
+        } */catch (ConflictException e) {
+            System.out.println("No se puede eliminar");
+        }
     }
 }
