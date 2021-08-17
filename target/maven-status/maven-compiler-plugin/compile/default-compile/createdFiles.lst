@@ -1,0 +1,8 @@
+controlador/ControlPiezas.class
+controlador/AutenticadorUsuario.class
+exceptions/DuplicadoException.class
+controlador/ConexionBD.class
+controlador/ControlUsuarios.class
+bean/Usuario$tipo.class
+bean/Usuario.class
+controlador/pruebas.class
