@@ -1,34 +1,53 @@
 package controlador;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 import exceptions.ConflictException;
 import exceptions.DuplicadoException;
+import exceptions.NoExisteException;
 
 public class pruebas {
     public static void main(String[] args){
         Scanner input = new Scanner(System.in);
-        String nombreModelo;
-        String nombrePieza;
-        int cantidadPieza;
+
+        /*
+        String nombre;
         System.out.println("Modelo:");
-        nombreModelo = input.nextLine();
-        System.out.println("Pieza:");
-        nombrePieza = input.nextLine();
-        System.out.println("Cantidad:");
-        cantidadPieza = Integer.valueOf( input.nextLine());
+        nombre = input.nextLine();
+
+        String username;
+        System.out.println("Usuario:");
+        username = input.nextLine();
+        */
+        int idMueble;
+        System.out.println("ID:");
+        idMueble = Integer.valueOf(input.nextLine());
+
+        /*
+        LocalDate fecha;
+        DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        System.out.println("Fecha:");
+        fecha = LocalDate.parse(input.nextLine(),formato);
+        */
+
         input.close();
         
+        Integer id[] = {4,8,10,11,12};
+        
         try {
-            ControlEnsamble.eliminarModelo(nombreModelo);
+            ControlEnsamble.desensamblarMueble(idMueble);
             System.out.println("Query exitoso");
         } catch (SQLException e) {
             e.printStackTrace();
-        } /*catch (DuplicadoException e) {
-            System.out.println("Ya estaba registrado");
-        } */catch (ConflictException e) {
-            System.out.println("No se puede eliminar");
+        } catch (NoExisteException e) {
+            System.out.println("Algo no existe");
+        } catch (ConflictException e) {
+            System.out.println("Hay un conflicto");
+        } catch (DuplicadoException e) {
+            System.out.println("Hay un duplicado");
         }
     }
 }
