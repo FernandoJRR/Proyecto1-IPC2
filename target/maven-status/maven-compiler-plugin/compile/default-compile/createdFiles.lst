@@ -1,8 +1,12 @@
+controlador/ControlEnsamble.class
 controlador/ControlPiezas.class
+exceptions/NoExisteException.class
 controlador/AutenticadorUsuario.class
+exceptions/ConflictException.class
 exceptions/DuplicadoException.class
 controlador/ConexionBD.class
 controlador/ControlUsuarios.class
 bean/Usuario$tipo.class
+controlador/ControlVentas.class
 bean/Usuario.class
-controlador/pruebas.class
+exceptions/FueraDeFechaException.class
