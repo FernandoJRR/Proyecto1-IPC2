@@ -33,33 +33,30 @@ public class pruebas {
         direccion = input.nextLine();
 
         */
-        LocalDate fecha;
+        LocalDate fechaEnsamble;
         DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         System.out.println("Fecha:");
-        fecha = LocalDate.parse(input.nextLine(),formato);
+        fechaEnsamble = LocalDate.parse(input.nextLine(),formato);
 
+        /*
         LocalDate fechaHasta;
         System.out.println("Fecha:");
         fechaHasta = LocalDate.parse(input.nextLine(),formato);
+        */
 
         input.close();
         
-        Integer id[] = {6};
+        Integer id[] = {17};
         
         try {
-            ResultSet ventas = ControlFinanzas.reporteDevoluciones(fecha, fechaHasta);
-            System.out.println("Query exitoso");
-            while (ventas.next()) {
-                System.out.println(ventas.getString("nombre_mueble"));
-                System.out.println(ventas.getString("fecha"));
-            }
+            ControlVentas.registrarCompra("1551906", "ventas02", fechaEnsamble, id);
         } catch (SQLException e) {
             e.printStackTrace();
-        } /*catch (NoExisteException e) {
+        } catch (NoExisteException e) {
             System.out.println("Algo no existe");
         } catch (ConflictException e) {
             System.out.println("Hay un conflicto");
-        } catch (FueraDeFechaException e) {
+        } /*catch (FueraDeFechaException e) {
             System.out.println("Fecha vencida");
         }*/
     }
