@@ -6,6 +6,7 @@
 /home/fernanrod/NetBeansProjects/Proyecto1IPC2/src/main/java/controlador/ControlUsuarios.java
 /home/fernanrod/NetBeansProjects/Proyecto1IPC2/src/main/java/controlador/ControlPiezas.java
 /home/fernanrod/NetBeansProjects/Proyecto1IPC2/src/main/java/bean/Usuario.java
+/home/fernanrod/NetBeansProjects/Proyecto1IPC2/src/main/java/servlets/registroPiezas.java
 /home/fernanrod/NetBeansProjects/Proyecto1IPC2/src/main/java/controlador/ConexionBD.java
 /home/fernanrod/NetBeansProjects/Proyecto1IPC2/src/main/java/exceptions/ConflictException.java
 /home/fernanrod/NetBeansProjects/Proyecto1IPC2/src/main/java/exceptions/DuplicadoException.java

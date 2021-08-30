@@ -16,7 +16,7 @@
 	<% } else if (request.getSession().getAttribute("tipoDeUsuario").toString().equals("FINANZAS")) {%>
 	<a class="navbar-brand">Finanzas</a>
 	<% }%>
-	<form class="form-inline" action="logout-servlet" method="GET">
+	<form class="form-inline" action="${pageContext.request.contextPath}/paginas/logout-servlet" method="GET">
 	    <a><i class="fa fa-user-circle m-2" aria-hidden="true"></i><%=request.getSession().getAttribute("usuario")%></a>
 	    <button class="btn btn-outline-danger my-2 my-sm-0 m-3" type="submit">Log out</button>
 	</form>

@@ -13,16 +13,16 @@
 	<ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
 	    <li class="nav-item">
 		<a href="${pageContext.request.contextPath}/paginas/fabrica/ver-piezas-registradas.jsp" class="nav-link align-middle px-0">
-		    <i class="fs-4 bi-house"></i> <span class="ms-1 d-none d-sm-inline">Ver Piezas Registradas</span>
+		    <i class="fs-4 bi-house"></i> <span class="ms-1 d-none d-sm-inline" style="color: #de9a57">Ver Piezas Registradas</span>
 		</a>
 	    </li>
 	    <li>
 		<a href="${pageContext.request.contextPath}/paginas/fabrica/registrar-nuevas-piezas.jsp" class="nav-link px-0 align-middle">
-		    <i class="fs-4 bi-table"></i> <span class="ms-1 d-none d-sm-inline">Registrar Nuevas Piezas</span></a>
+		    <i class="fs-4 bi-table"></i> <span class="ms-1 d-none d-sm-inline" style="color: #de9a57">Registrar Nuevas Piezas</span></a>
 	    </li>
 	    <li>
 		<a href="${pageContext.request.contextPath}/paginas/fabrica/modificar-o-eliminar-piezas.jsp" class="nav-link px-0 align-middle">
-		    <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Modificar o Eliminar Piezas</span> </a>
+		    <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline" style="color: #de9a57">Modificar o Eliminar Piezas</span> </a>
 	    </li>
 	</ul>
 	<hr>

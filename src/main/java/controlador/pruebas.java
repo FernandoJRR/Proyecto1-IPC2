@@ -15,11 +15,11 @@ public class pruebas {
     public static void main(String[] args){
         Scanner input = new Scanner(System.in);
 
-        /*
-        String nit;
-        System.out.println("NIT:");
-        nit = input.nextLine();
+        String patron;
+        System.out.println("Patron:");
+        patron = input.nextLine();
         
+        /*
         String usuario;
         System.out.println("User:");
         usuario = input.nextLine();
@@ -32,13 +32,11 @@ public class pruebas {
         System.out.println("Direccion:");
         direccion = input.nextLine();
 
-        */
         LocalDate fechaEnsamble;
         DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         System.out.println("Fecha:");
         fechaEnsamble = LocalDate.parse(input.nextLine(),formato);
 
-        /*
         LocalDate fechaHasta;
         System.out.println("Fecha:");
         fechaHasta = LocalDate.parse(input.nextLine(),formato);
@@ -49,14 +47,17 @@ public class pruebas {
         Integer id[] = {17};
         
         try {
-            ControlVentas.registrarCompra("1551906", "ventas02", fechaEnsamble, id);
+            ResultSet piezas = ControlPiezas.piezasDisponibles(patron);
+            while (piezas.next()) {
+                System.out.println(piezas.getInt("id"));
+            }
         } catch (SQLException e) {
             e.printStackTrace();
-        } catch (NoExisteException e) {
+        } /*catch (NoExisteException e) {
             System.out.println("Algo no existe");
         } catch (ConflictException e) {
             System.out.println("Hay un conflicto");
-        } /*catch (FueraDeFechaException e) {
+        } catch (FueraDeFechaException e) {
             System.out.println("Fecha vencida");
         }*/
     }

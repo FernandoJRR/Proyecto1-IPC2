@@ -16,6 +16,40 @@
 	</head>
 	<body>
 	<jsp:include page = "/includes/header.jsp"></jsp:include>
+		<div class="container-fluid vertical-center">
+		    <div class="card text-center mx-auto" style="width: 18rem;">
+			<img class="card-img-top" src="${pageContext.request.contextPath}/img/logoUsuario.jpg" alt="Card image cap">
+		    <div class="card-body">
+			<h5 class="card-title">Usuarios</h5>
+			<p class="card-text">Aqui puedes administrar los usuarios registrados en el sistema.</p>
+			<a href="${pageContext.request.contextPath}/paginas/administracion/usuarios-administracion.jsp" class="btn btn-primary">Administrar</a>
+		    </div>
+		</div>
+		<div class="card text-center mx-auto" style="width: 18rem;">
+		    <img class="card-img-top" src="${pageContext.request.contextPath}/img/modeloMadera.jpg" alt="Card image cap">
+		    <div class="card-body">
+			<h5 class="card-title">Modelos de Muebles</h5>
+			<p class="card-text">Aqui puedes administrar los registros de los modelos de muebles ensamblables de la muebleria.</p>
+			<a href="${pageContext.request.contextPath}/paginas/fabrica/modelos-fabrica.jsp" class="btn btn-primary">Administrar</a>
+		    </div>
+		</div>
+		<div class="card text-center mx-auto" style="width: 18rem;">
+		    <img class="card-img-top" src="${pageContext.request.contextPath}/img/logoReporte.jpg" alt="Card image cap">
+		    <div class="card-body">
+			<h5 class="card-title">Reportes</h5>
+			<p class="card-text">Aqui puedes ver los reportes de la Muebleria.</p>
+			<a href="${pageContext.request.contextPath}/paginas/administracion/usuarios-administracion.jsp" class="btn btn-primary">Revisar</a>
+		    </div>
+		</div>
+		<div class="card text-center mx-auto" style="width: 18rem;">
+		    <img class="card-img-top" src="${pageContext.request.contextPath}/img/cargaDatos.png" alt="Card image cap">
+		    <div class="card-body">
+			<h5 class="card-title">Carga de Datos</h5>
+			<p class="card-text">Aqui puedes cargar datos al sistema.</p>
+			<a href="${pageContext.request.contextPath}/paginas/fabrica/modelos-fabrica.jsp" class="btn btn-primary">Cargar</a>
+		    </div>
+		</div>
+	</div>
 	<jsp:include page = "/includes/footer.jsp"></jsp:include>
 	</body>
 	<script>window.addEventListener("pageshow", function (event) {

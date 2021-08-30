@@ -26,14 +26,6 @@
 		    </div>
 		</div>
 		<div class="card text-center mx-auto" style="width: 18rem;">
-		    <img class="card-img-top" src="${pageContext.request.contextPath}/img/modeloMadera.jpg" alt="Card image cap">
-		    <div class="card-body">
-			<h5 class="card-title">Modelos de Muebles</h5>
-			<p class="card-text">Aqui puedes administrar los registros de los modelos de muebles ensamblables de la muebleria.</p>
-			<a href="${pageContext.request.contextPath}/paginas/fabrica/modelos-fabrica.jsp" class="btn btn-primary">Administrar</a>
-		    </div>
-		</div>
-		<div class="card text-center mx-auto" style="width: 18rem;">
 		    <img class="card-img-top" src="${pageContext.request.contextPath}/img/muebleEnsamblado.jpeg" alt="Card image cap">
 		    <div class="card-body">
 			<h5 class="card-title">Ensamble de Muebles</h5>

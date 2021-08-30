@@ -14,14 +14,10 @@ import bean.Usuario;
  * @author fernanrod
  */
 public class AutenticadorUsuario {
-	final static String url = "jdbc:mariadb://localhost:3306/muebleria_mimuebleria";
-	final static String user = "fernanrod";
-	final static String pwd = "0contraSeQueL2";
-	
     public static boolean autenticarUsername(String username) {
         try{
             Connection connection = ConexionBD.getConnection();
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM usuario WHERE username = ?");
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM usuario WHERE username = ? AND estado = 'ACTIVO'");
             statement.setString(1, username);
             ResultSet resultSet = statement.executeQuery();
             return resultSet.next();
