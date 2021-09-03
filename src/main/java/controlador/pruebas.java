@@ -2,6 +2,7 @@ package controlador;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
@@ -36,26 +37,25 @@ public class pruebas {
         DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         System.out.println("Fecha:");
         fechaEnsamble = LocalDate.parse(input.nextLine(),formato);
-
-        LocalDate fechaHasta;
-        System.out.println("Fecha:");
-        fechaHasta = LocalDate.parse(input.nextLine(),formato);
         */
+        
+        DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        LocalDate fecha;
+        System.out.println("Fecha:");
+        fecha = LocalDate.parse(input.nextLine(),formato);
 
         input.close();
         
-        Integer id[] = {17};
+        Integer id[] = {4,18,29,30,8};
         
         try {
-            ResultSet piezas = ControlPiezas.piezasDisponibles(patron);
-            while (piezas.next()) {
-                System.out.println(piezas.getInt("id"));
-            }
+            ControlEnsamble.ensambleMueble("Mesa de Madera", "fabrica01", fecha);
         } catch (SQLException e) {
             e.printStackTrace();
-        } /*catch (NoExisteException e) {
+        } catch (NoExisteException e) {
             System.out.println("Algo no existe");
-        } catch (ConflictException e) {
+        }/* catch (ConflictException e) {
             System.out.println("Hay un conflicto");
         } catch (FueraDeFechaException e) {
             System.out.println("Fecha vencida");

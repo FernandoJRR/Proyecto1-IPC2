@@ -3,6 +3,7 @@ servlets/logout.class
 exceptions/NoExisteException.class
 controlador/ConexionBD.class
 servlets/registroPiezas.class
+bean/Cliente.class
 bean/Usuario$tipo.class
 bean/Usuario.class
 exceptions/FueraDeFechaException.class

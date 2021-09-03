@@ -3,15 +3,12 @@ package controlador;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collections;
 
 import exceptions.ConflictException;
 import exceptions.DuplicadoException;
 import exceptions.NoExisteException;
 import exceptions.FueraDeFechaException;
 
-import java.sql.Array;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -20,7 +17,7 @@ import java.sql.ResultSet;
 public class ControlVentas {
     static Connection connection = ConexionBD.getConnection();
 
-    static void registrarCliente(String nit, String nombre, String direccion) throws SQLException, DuplicadoException{
+    public static void registrarCliente(String nit, String nombre, String direccion) throws SQLException, DuplicadoException{
         //Se comprueba que el cliente no exista ya
         PreparedStatement comprobarCliente = connection.prepareStatement("SELECT * FROM cliente WHERE nit = ?");
         comprobarCliente.setString(1, nit);
@@ -36,7 +33,7 @@ public class ControlVentas {
         registrarCliente.executeUpdate();
     }
 
-    static void registrarCliente(String nit, String nombre, String direccion, String municipio, String departamento) throws SQLException, ConflictException, DuplicadoException{
+    public static void registrarCliente(String nit, String nombre, String direccion, String municipio, String departamento) throws SQLException, ConflictException, DuplicadoException{
         //Se comprueba que el cliente no exista ya
         PreparedStatement comprobarCliente = connection.prepareStatement("SELECT * FROM cliente WHERE nit = ?");
         comprobarCliente.setString(1, nit);
@@ -57,9 +54,27 @@ public class ControlVentas {
         preparedStatement.executeUpdate();
     }
     
-    static void registrarCompra(String nit, String usuario, LocalDate fecha,Integer...idMuebles) throws SQLException, NoExisteException, ConflictException{
+    public static void registrarCompra(String nit, String usuario, LocalDate fecha,Integer...idMuebles) throws SQLException, NoExisteException, ConflictException{
         try {
-            connection.setAutoCommit(false);
+            
+            //Se comprueba que no hayan valores duplicados en los id
+            for (int i = 0; i < idMuebles.length; i++) {
+                for (int j = 0; j < idMuebles.length; j++) {
+                    if (idMuebles[i].equals(idMuebles[j]) && i != j) {
+                        throw new ConflictException();
+                    }
+                }
+            }
+            
+            //Se comprueba que los id de todos los muebles existan
+            for (Integer idMueble : idMuebles) {
+                PreparedStatement obtenerMueble = connection.prepareStatement("SELECT * FROM mueble WHERE id = ?");
+                obtenerMueble.setInt(1, idMueble);
+                ResultSet mueble = obtenerMueble.executeQuery();
+                if (!mueble.next()) {
+                    throw new NoExisteException();
+                }
+            }
             
             //Se comprueba que los id de todos los muebles no han sido vendidos
             String statement = "SELECT mueble_comprado FROM compra WHERE mueble_comprado IN (";
@@ -74,6 +89,8 @@ public class ControlVentas {
                 throw new ConflictException();
             }
             
+            connection.setAutoCommit(false);
+
             //Si ninguno de los muebles ha sido vendido se registraran en una nueva factura
             PreparedStatement crearFactura = connection.prepareStatement("INSERT INTO factura(cliente,encargado,fecha) VALUES (?,?,?)", Statement.RETURN_GENERATED_KEYS);
             crearFactura.setString(1, nit);
@@ -121,7 +138,7 @@ public class ControlVentas {
         }       
     }
     
-    static void registrarDevolucion(String nit, String usuario, int idFactura, LocalDate fecha, Integer...idMuebles) throws SQLException, NoExisteException, FueraDeFechaException, ConflictException{
+    public static void registrarDevolucion(String nit, String usuario, int idFactura, LocalDate fecha, Integer...idMuebles) throws SQLException, NoExisteException, FueraDeFechaException, ConflictException{
         //Se comprueba que la factura exista
         PreparedStatement obtenerFactura = connection.prepareStatement("SELECT * FROM factura WHERE id = ?");
         obtenerFactura.setInt(1, idFactura);
@@ -140,6 +157,26 @@ public class ControlVentas {
         if (diferencia.next()) {
             if (diferencia.getInt("dias")< -7) { //En caso de que haya pasado mas de una semana desde la compra se tirara un error
                 throw new FueraDeFechaException();
+            }
+        }
+        
+        //Se comprueba que no hayan valores duplicados en los id
+        for (int i = 0; i < idMuebles.length; i++) {
+            for (int j = 0; j < idMuebles.length; j++) {
+                if (idMuebles[i].equals(idMuebles[j]) && i != j) {
+                    throw new ConflictException();
+                }
+            }
+        }
+        
+        //Se comprueba que los muebles ingresados pertenezcan a la factura ingresada
+        for (Integer idMueble : idMuebles) {
+        PreparedStatement obtenerMuebles = connection.prepareStatement("SELECT factura.id, compra.mueble_comprado FROM factura "+
+                                                                       "JOIN compra ON factura.id = compra.factura WHERE compra.mueble_comprado = ?");     
+            obtenerMuebles.setInt(1, idMueble);
+            ResultSet mueble = obtenerMuebles.executeQuery();
+            if (!mueble.next()) {
+                throw new NoExisteException();
             }
         }
         
@@ -214,4 +251,19 @@ public class ControlVentas {
             connection.setAutoCommit(true);
         }       
     }
+    
+    public static ResultSet obtenerDatosFactura(int numeroFactura) throws SQLException, NoExisteException{
+        PreparedStatement obtenerFactura = connection.prepareStatement("SELECT factura.*, compra.*, devolucion.comprobante FROM factura "+
+                                                                       "JOIN compra ON factura.id = compra.factura "+
+                                                                       "LEFT JOIN devolucion ON compra.mueble_comprado = devolucion.mueble_devuelto "+
+                                                                       "WHERE factura.id = ?");
+        obtenerFactura.setInt(1, numeroFactura);
+        ResultSet factura = obtenerFactura.executeQuery();
+        if (!factura.next()) {
+            throw new NoExisteException();
+        }
+        factura.beforeFirst();
+        return factura;
+    }
+    
 }

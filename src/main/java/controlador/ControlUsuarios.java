@@ -58,9 +58,14 @@ public class ControlUsuarios {
         return obtenerUsuarios.executeQuery();
     }
 
-    public static ResultSet obtenerUsuarios(Usuario.tipo tipoUsuario) throws SQLException{
-        PreparedStatement obtenerUsuarios = connection.prepareStatement("SELECT * FROM usuario WHERE tipo_usuario = ?");
-        obtenerUsuarios.setString(1, tipoUsuario.toString());
-        return obtenerUsuarios.executeQuery();
+    public static ResultSet obtenerDatosUsuario(String nit) throws SQLException, NoExisteException{
+        PreparedStatement obtenerUsuario = connection.prepareStatement("SELECT * FROM cliente WHERE nit = ?");
+        obtenerUsuario.setString(1, nit);
+        ResultSet usuario = obtenerUsuario.executeQuery();
+        if (!usuario.next()) {
+            throw new NoExisteException();
+        }
+        usuario.beforeFirst();
+        return usuario;
     }
 }

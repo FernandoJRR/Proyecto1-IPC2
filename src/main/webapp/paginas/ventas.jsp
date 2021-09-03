@@ -17,19 +17,27 @@
 	<jsp:include page = "/includes/header.jsp"></jsp:include>
 		<div class="container-fluid vertical-center">
 		    <div class="card text-center mx-auto" style="width: 18rem;">
-			<img class="card-img-top" src="${pageContext.request.contextPath}/img/logoUsuario.jpg" alt="Card image cap">
+			<img class="card-img-top" src="${pageContext.request.contextPath}/img/logoCompras.png" alt="Card image cap">
 		    <div class="card-body">
 			<h5 class="card-title">Registrar Compra</h5>
 			<p class="card-text">Aqui puedes facturar a los clientes que deseen realizar una compra.</p>
-			<a href="${pageContext.request.contextPath}/paginas/administracion/usuarios-administracion.jsp" class="btn btn-primary">Facturar</a>
+			<a href="${pageContext.request.contextPath}/paginas/ventas/compras-ventas.jsp" class="btn btn-primary">Facturar</a>
 		    </div>
 		</div>
 		<div class="card text-center mx-auto" style="width: 18rem;">
-		    <img class="card-img-top" src="${pageContext.request.contextPath}/img/modeloMadera.jpg" alt="Card image cap">
+		    <img class="card-img-top" src="${pageContext.request.contextPath}/img/logoDevolucion.jpg" alt="Card image cap">
 		    <div class="card-body">
 			<h5 class="card-title">Realizar Devolucion</h5>
 			<p class="card-text">Aqui puedes registrar una devolucion en caso que un cliente devuelva un mueble.</p>
-			<a href="${pageContext.request.contextPath}/paginas/fabrica/modelos-fabrica.jsp" class="btn btn-primary">Registrar</a>
+			<a href="${pageContext.request.contextPath}/paginas/ventas/devoluciones-ventas.jsp" class="btn btn-primary">Registrar</a>
+		    </div>
+		</div>
+		<div class="card text-center mx-auto" style="width: 18rem;">
+		    <img class="card-img-top" src="${pageContext.request.contextPath}/img/logoConsultas.png" alt="Card image cap">
+		    <div class="card-body">
+			<h5 class="card-title">Consultas</h5>
+			<p class="card-text">Aqui puedes realizar consultas como ver el catalogo, ver las ventas, entre otras.</p>
+			<a href="${pageContext.request.contextPath}/paginas/ventas/consultas-ventas.jsp" class="btn btn-primary">Registrar</a>
 		    </div>
 		</div>
 	</div>
