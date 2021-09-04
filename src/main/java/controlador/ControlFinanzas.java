@@ -7,8 +7,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 
-import org.mariadb.jdbc.internal.util.dao.PrepareResult;
-
 public class ControlFinanzas {
     static Connection connection = ConexionBD.getConnection();
     

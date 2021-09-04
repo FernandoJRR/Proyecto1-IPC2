@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import exceptions.ConflictException;
+import exceptions.NoExisteException;
 
 public class ControlPiezas {
     static Connection connection = ConexionBD.getConnection();
@@ -21,8 +22,16 @@ public class ControlPiezas {
         }
     };
     
-    static void eliminarPieza(int id) throws SQLException,ConflictException{
+    public static void eliminarPieza(int id) throws SQLException,ConflictException,NoExisteException{
         try {
+            //Se comprueba que la pieza exista
+            PreparedStatement existenciaPieza = connection.prepareStatement("SELECT * FROM pieza_de_madera WHERE id = ?");
+            existenciaPieza.setInt(1, id);
+            ResultSet pieza = existenciaPieza.executeQuery();
+            if (!pieza.next()) {
+                throw new NoExisteException();
+            }
+
             PreparedStatement comprobarMueblePieza = connection.prepareStatement("SELECT * FROM pieza_de_madera WHERE id = ? AND mueble IS NOT NULL");
             comprobarMueblePieza.setString(1, String.valueOf(id));
             ResultSet resultSet = comprobarMueblePieza.executeQuery();
@@ -78,5 +87,12 @@ public class ControlPiezas {
     public static ResultSet tipoPiezas() throws SQLException{
         PreparedStatement obtenerTipos = connection.prepareStatement("SELECT DISTINCT nombre FROM pieza_de_madera");
         return obtenerTipos.executeQuery();
+    }
+    
+    public static ResultSet cantidadesPiezas(String patron) throws SQLException{
+        PreparedStatement obtenerCantidades = connection.prepareStatement("SELECT nombre, count(*) as cantidad FROM pieza_de_madera "+
+                                                                          "WHERE nombre LIKE ? AND mueble IS NULL GROUP BY nombre");
+        obtenerCantidades.setString(1, "%" + patron + "%");     
+        return obtenerCantidades.executeQuery();
     }
 }

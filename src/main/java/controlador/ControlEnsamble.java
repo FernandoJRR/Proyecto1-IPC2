@@ -9,6 +9,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import org.mariadb.jdbc.internal.com.read.dao.Results;
+
 import java.time.LocalDate;
 
 import exceptions.ConflictException;
@@ -18,7 +20,7 @@ import exceptions.NoExisteException;
 public class ControlEnsamble {
     static Connection connection = ConexionBD.getConnection();
     
-    static void crearModeloMueble(String nombre, float costeDefault)throws SQLException, DuplicadoException{
+    public static void crearModeloMueble(String nombre, float costeDefault)throws SQLException, DuplicadoException{
         try {
             PreparedStatement comprobarDuplicado = connection.prepareStatement("SELECT * FROM modelo_mueble WHERE nombre = ?");
             comprobarDuplicado.setString(1, nombre);
@@ -38,7 +40,7 @@ public class ControlEnsamble {
         }
     }
     
-    static void agregarInstruccionModelo(String nombreModelo, String nombrePieza, int cantidadPieza) throws SQLException, DuplicadoException, ConflictException{
+    public static void agregarInstruccionModelo(String nombreModelo, String nombrePieza, int cantidadPieza) throws SQLException, DuplicadoException, ConflictException{
         try {
             PreparedStatement comprobarExistenciaModelo = connection.prepareStatement("SELECT * FROM modelo_mueble WHERE nombre = ?");
             comprobarExistenciaModelo.setString(1, nombreModelo);
@@ -96,7 +98,15 @@ public class ControlEnsamble {
         preparedStatement.executeUpdate();
     }
     
-    static void eliminarModelo(String nombre) throws SQLException,ConflictException{
+    public static void eliminarModelo(String nombre) throws SQLException,ConflictException,NoExisteException{
+        //Se comprueba que el modelo exista
+        PreparedStatement existenciaModelo = connection.prepareStatement("SELECT * FROM modelo_mueble WHERE nombre = ?");
+        existenciaModelo.setString(1, nombre);
+        ResultSet modelo = existenciaModelo.executeQuery();
+        if (!modelo.next()) {
+            throw new NoExisteException();
+        }
+
         PreparedStatement comprobarExistencia = connection.prepareStatement("SELECT * FROM mueble WHERE nombre_mueble = ?");
         comprobarExistencia.setString(1, nombre);
         ResultSet resultSet = comprobarExistencia.executeQuery();
@@ -126,6 +136,15 @@ public class ControlEnsamble {
         ArrayList<Integer> idPiezas = new ArrayList<>();
         ArrayList<String> piezasIngresadas = new ArrayList<>();
         Collections.addAll(idPiezas, id);
+        
+        //Se comprueba que no hayan valores duplicados en los id
+        for (int i = 0; i < id.length; i++) {
+            for (int j = 0; j < id.length; j++) {
+                if (id[i].equals(id[j]) && i != j) {
+                    throw new ConflictException();
+                }
+            }
+        }
         
         for (int idPieza : idPiezas) { //Se obtendra el nombre de cada pieza asociada a cada ID comprobando que la pieza no pertenezca ya a un mueble
             PreparedStatement piezas = connection.prepareStatement("SELECT nombre FROM pieza_de_madera WHERE id = ? AND mueble IS NULL");
@@ -165,7 +184,7 @@ public class ControlEnsamble {
         
     }
     
-    static void ensambleMueble(String modeloMueble, String username, LocalDate fechaEnsamble, Integer...id)throws SQLException,ConflictException,NoExisteException{
+    public static void ensambleMueble(String modeloMueble, String username, LocalDate fechaEnsamble, Integer...id)throws SQLException,ConflictException,NoExisteException{
         validarEnsambleMueble(modeloMueble, id);
         
         //En caso que se hayan pasado las comprobaciones sin errores, se ensamblara el mueble
@@ -315,7 +334,7 @@ public class ControlEnsamble {
         }
     }
     
-    static void desensamblarMueble(int idMueble) throws SQLException, NoExisteException{
+    public static void desensamblarMueble(int idMueble) throws SQLException, NoExisteException, ConflictException{
         //Se verifica que el mueble exista
         PreparedStatement obtenerMueble = connection.prepareStatement("SELECT * FROM mueble WHERE id = ?");
         obtenerMueble.setInt(1, idMueble);
@@ -324,16 +343,19 @@ public class ControlEnsamble {
             throw new NoExisteException();
         }
         
+        //Se comprueba que el mueble no haya sido desensamblado previamente
+        PreparedStatement comprobarDesenbamblado = connection.prepareStatement("SELECT * FROM pieza_de_madera WHERE mueble = ?");
+        comprobarDesenbamblado.setInt(1, idMueble);
+        ResultSet desensambleMueble = comprobarDesenbamblado.executeQuery();
+        if(!desensambleMueble.next()){
+            throw new ConflictException();
+        }
+        
         //Si el mueble existe se eliminara de la tabla mueble y sus piezas se desvincularan
         try {
             connection.setAutoCommit(false);
 
-            //Se elimina el mueble de la tabla
-            PreparedStatement eliminarMueble = connection.prepareStatement("DELETE FROM mueble WHERE id = ?");
-            eliminarMueble.setInt(1, idMueble);
-            eliminarMueble.executeUpdate();
-
-            //Se desvinculan las piezas
+            //Se desvinculan las piezas del mueble
             PreparedStatement desvincularPiezas = connection.prepareStatement("UPDATE pieza_de_madera SET mueble = NULL WHERE mueble = ?");
             desvincularPiezas.setInt(1, idMueble);
             desvincularPiezas.executeUpdate();
@@ -347,4 +369,51 @@ public class ControlEnsamble {
             connection.setAutoCommit(true);
         }
     }
+    
+    public static ResultSet obtenerMueblesEnsamblados(LocalDate fechaDesde, LocalDate fechaHasta) throws SQLException{
+        PreparedStatement obtenerMuebles = connection.prepareStatement("SELECT mueble.*, pieza_de_madera.id AS pieza FROM mueble "+
+                                                                       "LEFT JOIN pieza_de_madera ON mueble.id = pieza_de_madera.mueble "+
+                                                                       "WHERE fecha_ensamble BETWEEN ? AND ? "+
+                                                                       "GROUP BY mueble.id");
+        
+        //Si la fecha de inicio esta antes de la del final
+        if (fechaDesde.isBefore(fechaHasta)) {
+            obtenerMuebles.setDate(1, Date.valueOf(fechaDesde));
+            obtenerMuebles.setDate(2, Date.valueOf(fechaHasta));
+        //Si la fecha del final esta antes de la del principio
+        } else if (fechaHasta.isBefore(fechaDesde)) {
+            obtenerMuebles.setDate(1, Date.valueOf(fechaHasta));
+            obtenerMuebles.setDate(2, Date.valueOf(fechaDesde));
+        //Si ambas fechas con iguales
+        } else {
+            obtenerMuebles.setDate(1, Date.valueOf(fechaDesde));
+            obtenerMuebles.setDate(2, Date.valueOf(fechaHasta));
+        }
+        return obtenerMuebles.executeQuery();
+    }
+    
+    public static ResultSet obtenerMueblesEnsamblados() throws SQLException{
+        PreparedStatement obtenerMuebles = connection.prepareStatement("SELECT mueble.*, pieza_de_madera.id AS pieza FROM mueble "+
+                                                                       "LEFT JOIN pieza_de_madera ON mueble.id = pieza_de_madera.mueble "+
+                                                                       "GROUP BY mueble.id");
+        return obtenerMuebles.executeQuery();
+    }
+
+    public static ResultSet obtenerModelosMuebles() throws SQLException{
+        PreparedStatement obtenerModelos = connection.prepareStatement("SELECT * FROM modelo_mueble");
+        return obtenerModelos.executeQuery();
+    }
+    
+    public static ResultSet obtenerModelosMuebles(String patron) throws SQLException{
+        PreparedStatement obtenerModelos = connection.prepareStatement("SELECT * FROM modelo_mueble WHERE nombre LIKE ?");
+        obtenerModelos.setString(1, "%" + patron + "%");
+        return obtenerModelos.executeQuery();
+    }
+    
+    public static ResultSet obtenerInstruccionesModelo(String nombreModelo) throws SQLException{
+        PreparedStatement obtenerInstrucciones = connection.prepareStatement("SELECT tipo_pieza, cantidad_pieza FROM instrucciones_mueble WHERE nombre_mueble = ?");
+        obtenerInstrucciones.setString(1, nombreModelo);
+        return obtenerInstrucciones.executeQuery();
+    }
+    
 }

@@ -9,15 +9,53 @@
 <%@page import="java.sql.ResultSet"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%
+	ResultSet cantidadesPiezas = null;
 	ResultSet piezasDisponibles = null;
 	ResultSet piezasEnUso = null;
 	try {
+		cantidadesPiezas = ControlPiezas.cantidadesPiezas(request.getParameter("busqueda"));
 		piezasDisponibles = ControlPiezas.piezasDisponibles(request.getParameter("busqueda"));
 		piezasEnUso = ControlPiezas.piezasEnUso(request.getParameter("busqueda"));
 	} catch (SQLException e) {
 
 	}
 %>
+<h2>Cantidades de Piezas Disponibles</h2>
+<table class="table table-striped">
+    <thead>
+	<tr>
+	    <th>Nombre de la Pieza</th>
+	    <th>Cantidad de la Pieza</th>
+	    <th>Estado del Stock</th>
+	</tr>
+    </thead>
+    <tbody>
+	<%
+		while (cantidadesPiezas.next()) {
+			String nombrePieza = cantidadesPiezas.getString("nombre");
+			int cantidadPieza = cantidadesPiezas.getInt("cantidad");
+			String estadoStock = null;
+			if(cantidadPieza > 10){
+				estadoStock = "En Stock";
+			} else if(cantidadPieza <= 10 && cantidadPieza > 5){
+				estadoStock = "Necesario reabastecer";
+			} else if(cantidadPieza <= 5 && cantidadPieza > 0){
+				estadoStock = "A punto de agotarse";
+			} else if(cantidadPieza == 0){
+				estadoStock = "Agotado";
+			}
+			
+	%>
+	<tr>
+	    <td><%= nombrePieza%></td>
+	    <td><%= cantidadPieza%></td>
+	    <td><%= estadoStock%></td>
+	</tr>
+	<%
+		}%>
+    </tbody>
+</table>
+    
 <h2>Piezas Disponibles</h2>
 <table class="table table-striped">
     <thead>
@@ -42,6 +80,7 @@
 		}%>
     </tbody>
 </table>
+    
 <h2>Piezas En Uso</h2>
 <table class="table table-striped">
     <thead>
@@ -79,3 +118,4 @@
 		}%>
     </tbody>
 </table>
+

@@ -21,8 +21,12 @@
 		    <i class="fs-4 bi-table"></i> <span class="ms-1 d-none d-sm-inline" style="color: #de9a57">Registrar Nuevas Piezas</span></a>
 	    </li>
 	    <li>
-		<a href="${pageContext.request.contextPath}/paginas/fabrica/modificar-o-eliminar-piezas.jsp" class="nav-link px-0 align-middle">
-		    <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline" style="color: #de9a57">Modificar o Eliminar Piezas</span> </a>
+		<a href="${pageContext.request.contextPath}/paginas/fabrica/modificar-piezas.jsp" class="nav-link px-0 align-middle">
+		    <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline" style="color: #de9a57">Modificar Piezas</span> </a>
+	    </li>
+	    <li>
+		<a href="${pageContext.request.contextPath}/paginas/fabrica/eliminar-piezas.jsp" class="nav-link px-0 align-middle">
+		    <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline" style="color: #de9a57">Eliminar Piezas</span> </a>
 	    </li>
 	</ul>
 	<hr>

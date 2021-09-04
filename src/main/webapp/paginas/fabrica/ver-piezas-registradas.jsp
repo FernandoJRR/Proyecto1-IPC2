@@ -21,7 +21,7 @@
 			    <div class="col m-5 py-3">
 				<h2 class="vertical-center" style="margin-left: 40%" id="formBusqueda">Piezas Registradas</h2>
 				<form class="input-group m-auto vertical-center" style="max-width: 70%" action="ver-piezas-registradas.jsp" method="GET">
-				    <input type="text" class="form-control" placeholder="Nombre pieza:" name="busqueda" id="barraBusqueda">
+				    <input type="text" class="form-control" placeholder="Nombre modelo:" name="busqueda" id="barraBusqueda">
 				    <button class="btn btn-outline-primary" type="submit" id="boton-busqueda">Buscar</button>
 				</form>
 				<small id="notaBusqueda" class="form-text text-muted" style="margin-left: 15.3%">

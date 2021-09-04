@@ -33,7 +33,7 @@
 					    <input class="form-check-input mt-0" type="radio" name="tipo-pieza" value="" checked onclick="input2.disabled = true; input1.disabled = false">
 					</div>					
 					<select class="form-select" id="input1" name="input1" required>
-					    <option disabled selected value="0">Elige...</option>
+					    <option disabled selected value="">Elige...</option>
 					<%
 						ResultSet tiposDePiezas = null;
 						try {
