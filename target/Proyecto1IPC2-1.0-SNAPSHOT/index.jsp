@@ -19,7 +19,7 @@
 	<meta http-equiv="Content-Type" content="text/html">
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Prueba Login</title>
+	<title>Login</title>
 	<script src="bootstrap/js/bootstrap.min.js"></script>
 	<script src="jquery-3.6.0.js"></script>
 	<script src="index.js"></script>
