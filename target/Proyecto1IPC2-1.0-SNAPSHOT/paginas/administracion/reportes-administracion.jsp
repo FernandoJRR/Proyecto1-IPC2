@@ -17,36 +17,18 @@
 	<jsp:include page = "/includes/header.jsp"></jsp:include>
 		<div class="container-fluid">
 		    <div class="row flex-nowrap">
-		    <jsp:include page = "/includes/sidebar-administracion-reportes.jsp"></jsp:include>
-			    <div class="container-fluid align-self-center" style="margin-left: 15%" id="searchDiv">
-				<div class="row">
-				    <div class="col-md-auto" style="margin-left: 14%">
-					<h2>Usuarios Registrados</h2>
-				    </div>
-				</div>
-				<div class="row">
-				    <div class="col">
-					<form action="ver-usuarios-registrados.jsp" method="GET">
-					    <div class="input-group">
-						<div class="form-floating" style="min-width: 40%">
-						    <input type="text" class="form-control" id="barra" name="busqueda" placeholder="Username">
-						    <label for="barra">Username</label>
-						</div>
-						<button class="btn btn-outline-primary" type="submit">Buscar</button>
-					    </div>
-					    <div id="notaBusqueda" class="form-text">Si no ingresas nada a la barra se mostraran todos los usuarios.</div>
-					</form>
-				    </div>
-				</div>
-			    <c:if test="${param.busqueda != null}">
-				    <div class="row py-3" style="max-width: 47%">
-
-					<script>
-                                                document.getElementById("searchDiv").className = "container-fluid py-5";
-					</script>
-					<jsp:include page="resultados-usuarios-registrados.jsp"></jsp:include>
-					</div>
-			    </c:if>
+		    <jsp:include page = "/includes/sidebar-administracion-reportes.jsp"/>
+		    <div class="container-fluid align-self-center" style="margin-left: 15%" id="mensaje">
+			<div class="row">
+			    <div class="col-md-auto" style="margin-left: 16%">
+				<h2>Reportes de Administracion</h2>
+			    </div>
+			</div>
+			<div class="row">
+			    <div class="col-md-auto" style="margin-left: 12.5%">
+				<h4>Para ver algun reporte elige una opcion del menu</h4>
+			    </div>
+			</div>
 		    </div>
 		</div>
 	</div>
