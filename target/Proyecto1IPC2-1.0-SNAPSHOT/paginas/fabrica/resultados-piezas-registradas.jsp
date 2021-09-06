@@ -21,12 +21,12 @@
 	}
 %>
 <h2>Cantidades de Piezas Disponibles</h2>
-<table class="table table-striped">
+<table id="cantidadesTabla" class="table table-striped">
     <thead>
 	<tr>
-	    <th>Nombre de la Pieza</th>
-	    <th>Cantidad de la Pieza</th>
-	    <th>Estado del Stock</th>
+	    <th onclick="ordenarTabla('cantidadesTabla',0)">Nombre de la Pieza</th>
+	    <th onclick="ordenarTabla('cantidadesTabla',1)">Cantidad de la Pieza</th>
+	    <th onclick="ordenarTabla('cantidadesTabla',2)">Estado del Stock</th>
 	</tr>
     </thead>
     <tbody>
@@ -57,11 +57,11 @@
 </table>
     
 <h2>Piezas Disponibles</h2>
-<table class="table table-striped">
+<table id="piezasDisponiblesTabla" class="table table-striped">
     <thead>
 	<tr>
 	    <th>Id</th>
-	    <th>Nombre</th>
+	    <th onclick="ordenarTabla('piezasDisponiblesTabla',1)">Nombre</th>
 	    <th>Costo</th> 
 	</tr>
     </thead>
@@ -82,7 +82,7 @@
 </table>
     
 <h2>Piezas En Uso</h2>
-<table class="table table-striped">
+<table id="piezasEnUsoTable" class="table table-striped">
     <thead>
 	<tr>
 	    <th>Id</th>

@@ -6,14 +6,20 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import bean.Usuario;
+import exceptions.ConflictException;
 import exceptions.DuplicadoException;
 import exceptions.NoExisteException;
 
 public class ControlUsuarios {
     static Connection connection = ConexionBD.getConnection();
 
-    public static void crearUsuario(String username, String password, Usuario.tipo tipoUsuario) throws SQLException, DuplicadoException{
+    public static void crearUsuario(String username, String password, Usuario.tipo tipoUsuario) throws SQLException, DuplicadoException, ConflictException{
         try {
+            //En caso de que el password tenga menos de 6 caracteres se lanzara un error
+            if (password.length()<6) {
+                throw new ConflictException();
+            }
+
             PreparedStatement comprobarDuplicado = connection.prepareStatement("SELECT * FROM usuario WHERE username = ?");
             comprobarDuplicado.setString(1, username);
             ResultSet resultSet = comprobarDuplicado.executeQuery();

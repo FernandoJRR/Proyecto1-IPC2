@@ -4,6 +4,7 @@
     Author     : fernanrod
 --%>
 
+<%@page import="exceptions.ConflictException"%>
 <%@page import="exceptions.DuplicadoException"%>
 <%@page import="controlador.ControlUsuarios"%>
 <%@page import="bean.Usuario"%>
@@ -28,6 +29,13 @@
 %>
 <div class="alert alert-danger alert-dismissible fade show" role="alert">
     El nombre de usuario ya existe, elige otro.
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+<%
+} catch (ConflictException e) {
+%>
+<div class="alert alert-danger alert-dismissible fade show" role="alert">
+    El password debe tener tener al menos 6 caracteres.
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 </div>
 <%

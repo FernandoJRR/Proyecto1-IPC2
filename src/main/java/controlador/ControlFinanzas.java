@@ -179,4 +179,14 @@ public class ControlFinanzas {
         obtenerVentas.setString(1, nombreModeloMueble);
         return obtenerVentas.executeQuery();
     }
+    
+    public static ResultSet obtenerLineasCargadas() throws SQLException{
+        PreparedStatement obtenerLineas = connection.prepareStatement("SELECT * FROM ultimas_lineas_cargadas");
+        return obtenerLineas.executeQuery();
+    }
+    
+    public static ResultSet obtenerLineasConError() throws SQLException{
+        PreparedStatement obtenerLineas = connection.prepareStatement("SELECT * FROM ultimos_errores");
+        return obtenerLineas.executeQuery();
+    }
 }

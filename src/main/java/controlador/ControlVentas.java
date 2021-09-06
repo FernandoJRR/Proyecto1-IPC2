@@ -42,7 +42,7 @@ public class ControlVentas {
             throw new DuplicadoException();
         }
 
-        if (departamento == null && municipio != null){
+        if ((departamento == null && municipio != null)||(departamento != null && municipio == null)){
             throw new ConflictException();
         }
         PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO cliente(nit,nombre,direccion,municipio,departamento) VALUES (?,?,?,?,?)");

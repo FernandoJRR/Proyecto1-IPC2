@@ -20,8 +20,13 @@ import exceptions.NoExisteException;
 public class ControlEnsamble {
     static Connection connection = ConexionBD.getConnection();
     
-    public static void crearModeloMueble(String nombre, float costeDefault)throws SQLException, DuplicadoException{
+    public static void crearModeloMueble(String nombre, float costeDefault)throws SQLException, DuplicadoException, ConflictException{
         try {
+            //Se comprueba que el coste sea valido
+            if(costeDefault<0){
+                throw new ConflictException();
+            }
+
             PreparedStatement comprobarDuplicado = connection.prepareStatement("SELECT * FROM modelo_mueble WHERE nombre = ?");
             comprobarDuplicado.setString(1, nombre);
             ResultSet resultSet = comprobarDuplicado.executeQuery();
@@ -42,6 +47,11 @@ public class ControlEnsamble {
     
     public static void agregarInstruccionModelo(String nombreModelo, String nombrePieza, int cantidadPieza) throws SQLException, DuplicadoException, ConflictException{
         try {
+            //Se comprueba que la cantidad ingresada sea valida
+            if (cantidadPieza<=0) {
+                throw new ConflictException();
+            }
+
             PreparedStatement comprobarExistenciaModelo = connection.prepareStatement("SELECT * FROM modelo_mueble WHERE nombre = ?");
             comprobarExistenciaModelo.setString(1, nombreModelo);
             ResultSet resultSetModelo = comprobarExistenciaModelo.executeQuery();

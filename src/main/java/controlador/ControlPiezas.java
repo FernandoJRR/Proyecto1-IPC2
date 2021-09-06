@@ -11,8 +11,13 @@ import exceptions.NoExisteException;
 public class ControlPiezas {
     static Connection connection = ConexionBD.getConnection();
     
-    public static void crearPieza(String nombre, float costo) throws SQLException{
+    public static void crearPieza(String nombre, float costo) throws SQLException,ConflictException{
         try {
+            //Se comprueba que el precio sea valido
+            if (costo<0) {
+                throw new ConflictException();
+            }
+
             PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO pieza_de_madera(nombre,costo) VALUES (?,?)");
             preparedStatement.setString(1, nombre);
             preparedStatement.setString(2, String.valueOf(costo));

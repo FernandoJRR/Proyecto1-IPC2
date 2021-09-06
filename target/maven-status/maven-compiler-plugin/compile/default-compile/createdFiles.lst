@@ -1,8 +1,10 @@
+exceptions/FormatoException.class
 controlador/ControlEnsamble.class
 servlets/logout.class
 exceptions/NoExisteException.class
 controlador/ConexionBD.class
 servlets/registroPiezas.class
+servlets/cargaDatosServlet.class
 bean/Cliente.class
 bean/Usuario$tipo.class
 bean/Usuario.class
@@ -12,6 +14,7 @@ controlador/AutenticadorUsuario.class
 exceptions/ConflictException.class
 exceptions/DuplicadoException.class
 controlador/ControlUsuarios.class
+controlador/CargadorDatos.class
 controlador/ControlFinanzas.class
 controlador/ControlVentas.class
 controlador/pruebas.class

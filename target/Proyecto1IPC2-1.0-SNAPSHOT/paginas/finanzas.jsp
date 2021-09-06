@@ -38,7 +38,7 @@
 		    <div class="card-body">
 			<h5 class="card-title">Reportes</h5>
 			<p class="card-text">Aqui puedes ver los reportes de la Muebleria.</p>
-			<a href="${pageContext.request.contextPath}/paginas/administracion/usuarios-administracion.jsp" class="btn btn-primary">Revisar</a>
+			<a href="${pageContext.request.contextPath}/paginas/administracion/reportes-administracion.jsp" class="btn btn-primary">Revisar</a>
 		    </div>
 		</div>
 		<div class="card text-center mx-auto" style="width: 18rem;">
@@ -46,7 +46,7 @@
 		    <div class="card-body">
 			<h5 class="card-title">Carga de Datos</h5>
 			<p class="card-text">Aqui puedes cargar datos al sistema.</p>
-			<a href="${pageContext.request.contextPath}/paginas/fabrica/modelos-fabrica.jsp" class="btn btn-primary">Cargar</a>
+			<a href="${pageContext.request.contextPath}/paginas/administracion/carga-datos.jsp" class="btn btn-primary">Cargar</a>
 		    </div>
 		</div>
 	</div>

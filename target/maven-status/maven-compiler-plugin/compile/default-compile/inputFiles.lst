@@ -7,10 +7,13 @@
 /home/fernanrod/NetBeansProjects/Proyecto1IPC2/src/main/java/controlador/ControlUsuarios.java
 /home/fernanrod/NetBeansProjects/Proyecto1IPC2/src/main/java/controlador/ControlPiezas.java
 /home/fernanrod/NetBeansProjects/Proyecto1IPC2/src/main/java/bean/Usuario.java
+/home/fernanrod/NetBeansProjects/Proyecto1IPC2/src/main/java/servlets/cargaDatosServlet.java
 /home/fernanrod/NetBeansProjects/Proyecto1IPC2/src/main/java/servlets/registroPiezas.java
+/home/fernanrod/NetBeansProjects/Proyecto1IPC2/src/main/java/exceptions/FormatoException.java
 /home/fernanrod/NetBeansProjects/Proyecto1IPC2/src/main/java/controlador/ConexionBD.java
 /home/fernanrod/NetBeansProjects/Proyecto1IPC2/src/main/java/exceptions/ConflictException.java
 /home/fernanrod/NetBeansProjects/Proyecto1IPC2/src/main/java/exceptions/DuplicadoException.java
 /home/fernanrod/NetBeansProjects/Proyecto1IPC2/src/main/java/controlador/AutenticadorUsuario.java
 /home/fernanrod/NetBeansProjects/Proyecto1IPC2/src/main/java/servlets/logout.java
 /home/fernanrod/NetBeansProjects/Proyecto1IPC2/src/main/java/controlador/ControlVentas.java
+/home/fernanrod/NetBeansProjects/Proyecto1IPC2/src/main/java/controlador/CargadorDatos.java

@@ -11,6 +11,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<jsp:include page = "/includes/recursos.jsp"></jsp:include>
+	<script src="${pageContext.request.contextPath}/resources/js/util-tablas.js"></script>
 		<title>Departamento de Fabrica</title>
 	</head>
 	<body>

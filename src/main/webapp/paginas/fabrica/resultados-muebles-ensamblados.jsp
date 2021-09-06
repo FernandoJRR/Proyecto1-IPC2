@@ -30,15 +30,15 @@
 	}
 %>
 <h2 class="mt-3">Muebles Creados</h2>
-<table class="table table-striped">
+<table id="mueblesCreadosTabla" class="table table-striped">
     <thead>
 	<tr>
 	    <th>Id</th>
-	    <th>Nombre</th>
+	    <th onclick="ordenarTabla('mueblesCreadosTabla',1)">Nombre</th>
 	    <th>Precio de Venta</th> 
-	    <th>Fecha de Ensamble</th> 
-	    <th>Usuario Ensamblador</th> 
-	    <th>Estado</th> 
+	    <th onclick="ordenarTabla('mueblesCreadosTabla',3)">Fecha de Ensamble</th> 
+	    <th onclick="ordenarTabla('mueblesCreadosTabla',4)">Usuario Ensamblador</th> 
+	    <th onclick="ordenarTabla('mueblesCreadosTabla',5)">Estado</th> 
 	</tr>
     </thead>
     <tbody>

@@ -47,6 +47,12 @@
 					    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 					</div>
 				</c:if>
+				<c:if test="${param.fueraDeFecha != null}">
+					<div class="alert alert-danger alert-dismissible fade show" role="alert">
+					    Ha pasado mas de una semana desde la compra, por lo que no se puede devolver ningun mueble.
+					    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+					</div>
+				</c:if>
 				<c:if test="${param.error != null}">
 					<div class="alert alert-danger alert-dismissible fade show" role="alert">
 					    Ha ocurrido un error fatal, contacta al administrador.
