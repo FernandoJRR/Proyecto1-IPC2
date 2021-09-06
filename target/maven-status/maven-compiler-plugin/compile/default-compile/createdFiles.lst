@@ -5,8 +5,10 @@ exceptions/NoExisteException.class
 controlador/ConexionBD.class
 servlets/registroPiezas.class
 servlets/cargaDatosServlet.class
+controlador/GeneradorReportesCSV.class
 bean/Cliente.class
 bean/Usuario$tipo.class
+servlets/servletDescarga.class
 bean/Usuario.class
 exceptions/FueraDeFechaException.class
 controlador/ControlPiezas.class

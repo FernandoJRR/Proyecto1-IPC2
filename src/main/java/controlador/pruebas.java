@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.text.DateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -50,19 +51,15 @@ public class pruebas {
 
         input.close();
 
-        String linea = "ENSAMBLAR_MUEBLE(\"Mesa rustica\", jgranados,\"21/04/2018\")";
-        
-        Pattern patronEnsamblarMueble = Pattern.compile("^ENSAMBLAR_MUEBLE\\(\"[\\w\\s]+\",\\s*[\\w\\s]+,\\s*\"\\d{2}/\\d{2}/\\d{4}\"\\)$");
-        Matcher matcher = patronEnsamblarMueble.matcher(linea);
-        
-        String parametros = linea.substring(9, linea.length()-1);
-        String[] arregloParametros = parametros.split("\\,");
-        arregloParametros[0] = arregloParametros[0].substring(0,arregloParametros[0].length()-1).trim();
-        for (int i = 1; i < arregloParametros.length; i++) {
-            arregloParametros[i] = arregloParametros[i].trim().substring(1, arregloParametros[i].trim().length()-1);
+        try {
+            ArrayList<String> reporteCSV = GeneradorReportesCSV.generarReporteVentas();
+            for (String linea : reporteCSV) {
+                System.out.println(linea);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-        
-        System.out.println(matcher.matches());
+
         /*
         for (String string : arregloParametros) {
             System.out.println(string);

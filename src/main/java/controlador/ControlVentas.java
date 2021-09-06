@@ -266,4 +266,103 @@ public class ControlVentas {
         return factura;
     }
     
+    public static ResultSet obtenerMueblesSalaVentas() throws SQLException{
+        PreparedStatement obtenerMueblesSalaVentas = connection.prepareStatement("SELECT id, nombre_mueble, precio_venta FROM mueble "+
+                                                                                 "WHERE id NOT IN "+
+                                                                                 "(SELECT mueble_comprado FROM compra) "+
+                                                                                 "AND id IN "+
+                                                                                 "(SELECT mueble FROM pieza_de_madera)");
+        return obtenerMueblesSalaVentas.executeQuery();
+    }
+    
+    public static ResultSet obtenerComprasCliente(String nitCliente, LocalDate primerFecha, LocalDate segundaFecha) throws SQLException{
+        PreparedStatement obtenerCompras = connection.prepareStatement("SELECT mueble_comprado AS id, nombre_mueble, precio, fecha FROM factura "+
+                                                                       "JOIN compra ON factura.id = compra.factura "+
+                                                                       "WHERE cliente = ? AND fecha BETWEEN ? AND ? ");
+        obtenerCompras.setString(1, nitCliente);
+        //
+        //Si la fecha de inicio esta antes de la del final
+        if (primerFecha.isBefore(segundaFecha)) {
+            obtenerCompras.setDate(2, Date.valueOf(primerFecha));
+            obtenerCompras.setDate(3, Date.valueOf(segundaFecha));
+        //Si la fecha del final esta antes de la del principio
+        } else if (segundaFecha.isBefore(primerFecha)) {
+            obtenerCompras.setDate(2, Date.valueOf(segundaFecha));
+            obtenerCompras.setDate(3, Date.valueOf(primerFecha));
+        //Si ambas fechas con iguales
+        } else {
+            obtenerCompras.setDate(2, Date.valueOf(primerFecha));
+            obtenerCompras.setDate(3, Date.valueOf(segundaFecha));
+        }
+        return obtenerCompras.executeQuery();
+    }
+    
+    public static ResultSet obtenerComprasCliente(String nitCliente) throws SQLException{
+        PreparedStatement obtenerCompras = connection.prepareStatement("SELECT mueble_comprado AS id, nombre_mueble, precio, fecha "+
+                                                                       "FROM factura JOIN compra ON factura.id = compra.factura "+
+                                                                       "WHERE cliente = ? ");
+        obtenerCompras.setString(1, nitCliente);
+        return obtenerCompras.executeQuery();
+    }
+
+    public static ResultSet obtenerDevolucionesCliente(String nitCliente, LocalDate primerFecha, LocalDate segundaFecha) throws SQLException{
+        PreparedStatement obtenerCompras = connection.prepareStatement("SELECT mueble_devuelto AS id, nombre_mueble, costo, fecha FROM comprobante_devolucion "+
+                                                                       "JOIN devolucion ON comprobante_devolucion.id = devolucion.comprobante "+
+                                                                       "WHERE cliente = ? AND fecha BETWEEN ? AND ? ");
+        obtenerCompras.setString(1, nitCliente);
+        //
+        //Si la fecha de inicio esta antes de la del final
+        if (primerFecha.isBefore(segundaFecha)) {
+            obtenerCompras.setDate(2, Date.valueOf(primerFecha));
+            obtenerCompras.setDate(3, Date.valueOf(segundaFecha));
+        //Si la fecha del final esta antes de la del principio
+        } else if (segundaFecha.isBefore(primerFecha)) {
+            obtenerCompras.setDate(2, Date.valueOf(segundaFecha));
+            obtenerCompras.setDate(3, Date.valueOf(primerFecha));
+        //Si ambas fechas con iguales
+        } else {
+            obtenerCompras.setDate(2, Date.valueOf(primerFecha));
+            obtenerCompras.setDate(3, Date.valueOf(segundaFecha));
+        }
+        return obtenerCompras.executeQuery();
+    }
+    
+
+    public static ResultSet obtenerDevolucionesCliente(String nitCliente) throws SQLException{
+        PreparedStatement obtenerCompras = connection.prepareStatement("SELECT mueble_devuelto AS id, nombre_mueble, costo, fecha FROM comprobante_devolucion "+
+                                                                       "JOIN devolucion ON comprobante_devolucion.id = devolucion.comprobante "+
+                                                                       "WHERE cliente = ? ");
+        obtenerCompras.setString(1, nitCliente);
+        return obtenerCompras.executeQuery();
+    }
+    
+    public static ResultSet obtenerNitClientes() throws SQLException{
+        PreparedStatement obtenerNit = connection.prepareStatement("SELECT nit FROM cliente");
+        return obtenerNit.executeQuery();
+    }
+    
+    public static ResultSet obtenerDetallesFactura(int factura) throws SQLException, NoExisteException{
+        //Se comprueba que la factura exista
+        PreparedStatement obtenerFactura = connection.prepareStatement("SELECT * FROM factura WHERE id = ?");
+        obtenerFactura.setInt(1, factura);
+        ResultSet facturaObtenida = obtenerFactura.executeQuery();
+        if (!facturaObtenida.next()) {
+            throw new NoExisteException();
+        }
+        facturaObtenida.beforeFirst();
+        return facturaObtenida;
+    }
+    
+    public static ResultSet obtenerComprasFactura(int factura) throws SQLException{
+        PreparedStatement obtenerCompras = connection.prepareStatement("SELECT * FROM compra WHERE factura = ?");
+        obtenerCompras.setInt(1, factura);
+        return obtenerCompras.executeQuery();
+    }
+    
+    public static ResultSet ventasDelDia() throws SQLException{
+        PreparedStatement obtenerVentas = connection.prepareStatement("SELECT factura, mueble_comprado AS id, precio, nombre_mueble FROM compra "+
+                                                                      "JOIN factura ON compra.factura = factura.id WHERE fecha = ?");
+        obtenerVentas.setDate(1, Date.valueOf(LocalDate.now()));
+        return obtenerVentas.executeQuery();
+    }
 }

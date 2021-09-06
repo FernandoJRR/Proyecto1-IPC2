@@ -4,6 +4,11 @@
     Author     : fernanrod
 --%>
 
+<%@page import="java.io.FileWriter"%>
+<%@page import="java.io.BufferedWriter"%>
+<%@page import="java.io.File"%>
+<%@page import="controlador.GeneradorReportesCSV"%>
+<%@page import="java.util.ArrayList"%>
 <%@page import="controlador.ControlFinanzas"%>
 <%@page import="java.time.LocalDate"%>
 <%@page import="java.time.format.DateTimeFormatter"%>
@@ -79,4 +84,32 @@
 		}%>
     </tbody>
 </table>
-<% }%>
+<% }
+	ArrayList<String> reporteCSV = null;
+	if (primerFecha.equals("") || segundaFecha.equals("")) {
+		reporteCSV = GeneradorReportesCSV.generarReporteMueblesVendidos(orden);
+	} else {
+		DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		reporteCSV = GeneradorReportesCSV.generarReporteMueblesVendidos(orden, LocalDate.parse(primerFecha, formato), LocalDate.parse(segundaFecha, formato));
+	}
+
+	String path = System.getProperty("user.home") + "/temp.csv";
+	File strFile = new File(path);
+	boolean fileCreated = strFile.createNewFile();
+	//Escritura del archivo
+	BufferedWriter objWriter = new BufferedWriter(new FileWriter(strFile));
+	for (String linea : reporteCSV) {
+		objWriter.write(linea);
+		objWriter.newLine();
+	}
+	objWriter.flush();
+	objWriter.close();
+
+	String reporte = null;
+	if (orden) {
+		reporte = "mas";
+	} else {
+		reporte = "menos";
+	}
+%>
+<a href="servlet-descarga?path=<%= path%>&nombre-archivo=reporte-muebles-<%= reporte%>-vendidos"><button type="button" class="btn btn-primary">Descargar</button> </a>

@@ -78,10 +78,12 @@ public class ControlFinanzas {
     }
     
     public static ResultSet reporteGanancias(LocalDate fechaDesde, LocalDate fechaHasta) throws SQLException{
-        PreparedStatement obtenerVentas = connection.prepareStatement("SELECT compra.mueble_comprado AS id, compra.nombre_mueble, compra.precio, factura.fecha "+
-                                                                      "FROM compra JOIN factura ON compra.factura = factura.id "+
-                                                                      "WHERE factura.fecha BETWEEN ? AND ?");
-        
+        PreparedStatement obtenerVentas = connection.prepareStatement("SELECT compra.mueble_comprado AS id, compra.nombre_mueble, compra.precio, factura.fecha, compra.precio-SUM(pieza_de_madera.costo) AS ganancia "+
+                                                                      "FROM compra "+
+                                                                      "JOIN factura ON compra.factura = factura.id "+
+                                                                      "LEFT JOIN pieza_de_madera ON compra.mueble_comprado = pieza_de_madera.mueble "+
+                                                                      "WHERE fecha BETWEEN ? AND ? "+
+                                                                      "GROUP BY pieza_de_madera.mueble");
         //Si la fecha de inicio esta antes de la del final
         if (fechaDesde.isBefore(fechaHasta)) {
             obtenerVentas.setDate(1, Date.valueOf(fechaDesde));
@@ -98,10 +100,12 @@ public class ControlFinanzas {
         return obtenerVentas.executeQuery();
     }
     
-    public static ResultSet obtenerGanancia(LocalDate fechaDesde, LocalDate fechaHasta) throws SQLException{
-        PreparedStatement obtenerGanancia = connection.prepareStatement("SELECT SUM(precio) as ganancia_total "+
-                                                                        "FROM compra JOIN factura ON compra.factura = factura.id "+
-                                                                        "WHERE factura.fecha BETWEEN ? AND ?");
+    public static Float obtenerGanancia(LocalDate fechaDesde, LocalDate fechaHasta) throws SQLException{
+        PreparedStatement obtenerGanancia = connection.prepareStatement("SELECT precio, compra.precio - SUM(pieza_de_madera.costo) AS ganancia FROM compra "+
+                                                                        "JOIN factura ON compra.factura = factura.id "+
+                                                                        "LEFT JOIN pieza_de_madera ON compra.mueble_comprado = pieza_de_madera.mueble "+
+                                                                        "WHERE fecha BETWEEN ? AND ? "+
+                                                                        "GROUP BY pieza_de_madera.mueble");
         //Si la fecha de inicio esta antes de la del final
         if (fechaDesde.isBefore(fechaHasta)) {
             obtenerGanancia.setDate(1, Date.valueOf(fechaDesde));
@@ -115,19 +119,43 @@ public class ControlFinanzas {
             obtenerGanancia.setDate(1, Date.valueOf(fechaDesde));
             obtenerGanancia.setDate(2, Date.valueOf(fechaHasta));
         }
-        return obtenerGanancia.executeQuery();
+        ResultSet ganancias =  obtenerGanancia.executeQuery();
+        float gananciaTotal = 0;
+        while (ganancias.next()) {
+            if (ganancias.getString("ganancia")==null) {
+                gananciaTotal += ganancias.getFloat("precio")/3;
+            } else {
+                gananciaTotal += ganancias.getFloat("ganancia");
+            }
+        }
+        return gananciaTotal;
     }
     
     public static ResultSet reporteGanancias() throws SQLException{
-        PreparedStatement obtenerVentas = connection.prepareStatement("SELECT compra.mueble_comprado AS id, compra.nombre_mueble, compra.precio, factura.fecha "+
-                                                                      "FROM compra JOIN factura ON compra.factura = factura.id");
+        PreparedStatement obtenerVentas = connection.prepareStatement("SELECT compra.mueble_comprado AS id, compra.nombre_mueble, compra.precio, factura.fecha, compra.precio-SUM(pieza_de_madera.costo) AS ganancia "+
+                                                                      "FROM compra "+
+                                                                      "JOIN factura ON compra.factura = factura.id "+
+                                                                      "LEFT JOIN pieza_de_madera ON compra.mueble_comprado = pieza_de_madera.mueble "+
+                                                                      "GROUP BY pieza_de_madera.mueble");
         return obtenerVentas.executeQuery();
     }
     
-    public static ResultSet obtenerGanancia() throws SQLException{
-        PreparedStatement obtenerGanancia = connection.prepareStatement("SELECT SUM(precio) as ganancia_total "+
-                                                                        "FROM compra JOIN factura ON compra.factura = factura.id");
-        return obtenerGanancia.executeQuery();
+    public static Float obtenerGanancia() throws SQLException{
+        PreparedStatement obtenerGanancia = connection.prepareStatement("SELECT precio, compra.precio - SUM(pieza_de_madera.costo) AS ganancia FROM compra "+
+                                                                        "JOIN factura ON compra.factura = factura.id "+
+                                                                        "LEFT JOIN pieza_de_madera ON compra.mueble_comprado = pieza_de_madera.mueble "+
+                                                                        "GROUP BY pieza_de_madera.mueble");
+        
+        ResultSet ganancias = obtenerGanancia.executeQuery();
+        float gananciaTotal = 0;
+        while (ganancias.next()) {
+            if (ganancias.getString("ganancia")==null) {
+                gananciaTotal += ganancias.getFloat("precio")/3;
+            } else {
+                gananciaTotal += ganancias.getFloat("ganancia");
+            }
+        }
+        return gananciaTotal;
     }
 
     public static ResultSet obtenerRankingVentas(LocalDate fechaDesde, LocalDate fechaHasta) throws SQLException{
@@ -163,10 +191,11 @@ public class ControlFinanzas {
     }
     
     public static ResultSet obtenerVentasPorUsuario(String username, LocalDate fechaDesde, LocalDate fechaHasta) throws SQLException{
-        PreparedStatement obtenerVentas = connection.prepareStatement("SELECT compra.mueble_comprado AS id, compra.nombre_mueble, compra.precio, factura.fecha FROM usuario "+
-                                                                      "JOIN factura ON usuario.username = factura.encargado "+
-                                                                      "JOIN compra ON factura.id = compra.factura WHERE usuario.username = ? AND "+
-                                                                      "factura.fecha BETWEEN ? AND ?");
+        PreparedStatement obtenerVentas = connection.prepareStatement("SELECT compra.mueble_comprado AS id, nombre_mueble, compra.precio-SUM(pieza_de_madera.costo) AS ganancia, fecha, precio "+
+                                                                      "FROM compra JOIN factura ON compra.factura = factura.id "+
+                                                                      "LEFT JOIN pieza_de_madera ON compra.mueble_comprado = pieza_de_madera.mueble "+
+                                                                      "WHERE encargado = ? AND fecha BETWEEN ? AND ? "+
+                                                                      "GROUP BY compra.mueble_comprado");
 
         obtenerVentas.setString(1, username);
         
@@ -188,9 +217,11 @@ public class ControlFinanzas {
     }
     
     public static ResultSet obtenerVentasPorUsuario(String username) throws SQLException{
-        PreparedStatement obtenerVentas = connection.prepareStatement("SELECT compra.mueble_comprado AS id, compra.nombre_mueble, compra.precio, factura.fecha FROM usuario "+
-                                                                      "JOIN factura ON usuario.username = factura.encargado "+
-                                                                      "JOIN compra ON factura.id = compra.factura WHERE usuario.username = ?");
+        PreparedStatement obtenerVentas = connection.prepareStatement("SELECT compra.mueble_comprado AS id, nombre_mueble, compra.precio-SUM(pieza_de_madera.costo) AS ganancia, fecha, precio "+
+                                                                      "FROM compra JOIN factura ON compra.factura = factura.id "+
+                                                                      "LEFT JOIN pieza_de_madera ON compra.mueble_comprado = pieza_de_madera.mueble "+
+                                                                      "WHERE encargado = ? "+
+                                                                      "GROUP BY compra.mueble_comprado");
 
         obtenerVentas.setString(1, username);
         return obtenerVentas.executeQuery();

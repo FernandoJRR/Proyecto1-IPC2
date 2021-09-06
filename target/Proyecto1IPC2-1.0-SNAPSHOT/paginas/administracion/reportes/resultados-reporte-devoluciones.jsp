@@ -4,6 +4,11 @@
     Author     : fernanrod
 --%>
 
+<%@page import="java.io.FileWriter"%>
+<%@page import="java.io.BufferedWriter"%>
+<%@page import="java.io.File"%>
+<%@page import="controlador.GeneradorReportesCSV"%>
+<%@page import="java.util.ArrayList"%>
 <%@page import="controlador.ControlFinanzas"%>
 <%@page import="java.time.LocalDate"%>
 <%@page import="java.time.format.DateTimeFormatter"%>
@@ -25,7 +30,7 @@
 
 	} catch (SQLException e) {
 %><h2>Ha ocurrido un error.</h2><%
-	e.printStackTrace();
+		e.printStackTrace();
 	}
 %>
 <h2 class="mt-3">Devoluciones Realizadas</h2>
@@ -61,3 +66,28 @@
 		}%>
     </tbody>
 </table>
+<%
+	String primerFecha = request.getParameter("primerFecha");
+	String segundaFecha = request.getParameter("segundaFecha");
+
+	ArrayList<String> reporteCSV = null;
+	if (primerFecha.equals("") || segundaFecha.equals("")) {
+		reporteCSV = GeneradorReportesCSV.generarReporteDevoluciones();
+	} else {
+		DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		reporteCSV = GeneradorReportesCSV.generarReporteDevoluciones(LocalDate.parse(primerFecha, formato), LocalDate.parse(segundaFecha, formato));
+	}
+
+	String path = System.getProperty("user.home") + "/temp.csv";
+	File strFile = new File(path);
+	boolean fileCreated = strFile.createNewFile();
+	//Se escribe el archivo
+	BufferedWriter objWriter = new BufferedWriter(new FileWriter(strFile));
+	for (String linea : reporteCSV) {
+		objWriter.write(linea);
+		objWriter.newLine();
+	}
+	objWriter.flush();
+	objWriter.close();
+%>
+<a href="servlet-descarga?path=<%= path%>&nombre-archivo=reporte-devoluciones"><button type="button" class="btn btn-primary">Descargar</button> </a>
