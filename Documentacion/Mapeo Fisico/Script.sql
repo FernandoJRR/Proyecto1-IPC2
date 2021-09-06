@@ -101,3 +101,5 @@ id INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
 expresion LONGTEXT NOT NULL,
 error VARCHAR(254) NOT NULL
 );
+
+INSERT INTO usuario(username,password,tipo_usuario) VALUES ('admin01','123456','FINANZAS');
